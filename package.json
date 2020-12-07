@@ -1,0 +1,52 @@
+{
+  "name": "ecommerce-api",
+  "version": "1.0.0",
+  "description": "The full api for ecommerce",
+  "main": "index.js",
+  "scripts": {
+    "test": "cross-env process.env.NODE_ENV=test nyc mocha --require babel-register tests/*.js --recursive --exit",
+    "start": "node build/index.js",
+    "eslint": "eslint . --fix",
+    "dev": "cross-env process.env.NODE_ENV=development nodemon src/index.js --exec babel-node --",
+    "clean": "rm -rf dist && mkdir dist",
+    "postinstall": "babel src -d build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jpsoarxs/ecommerce-api.git"
+  },
+  "author": "Joao Pedro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jpsoarxs/ecommerce-api/issues"
+  },
+  "homepage": "https://github.com/jpsoarxs/ecommerce-api#readme",
+  "dependencies": {
+    "@hapi/joi": "^15.0.0",
+    "babel-polyfill": "^6.26.0",
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "cross-env": "^5.2.0",
+    "dotenv": "^7.0.0",
+    "express": "^4.16.4",
+    "grpc": "^1.24.4",
+    "helmet": "^3.18.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.11",
+    "mongoose": "^5.11.4",
+    "passport-facebook": "^3.0.0",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.17.2",
+    "mocha": "^6.1.4",
+    "nodemon": "^1.18.11"
+  }
+}
