@@ -83,7 +83,7 @@ class ProductController {
   static async findByID(req, res) {
     const { id } = req.params;
     try {
-      const product = await Product.findById(id).populate('category');
+      const product = await Product.findById(id).populate(['category', 'attributes']);
 
       if (!product) {
         return errorResponse(res, 400, 'PRO_01', 'Nenhum produto encontrado com esse ID');
