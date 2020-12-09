@@ -85,7 +85,24 @@ class CartController {
     */
   static async list(req, res) {
     try {
-      const cart = await Cart.find().populate(['customer', 'product']);
+      const cart = await Cart.find().populate('product');
+      return res.status(200).json(cart);
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
+
+  /**
+    * @description -This method generates a unique id
+    * @param {object} req - The request payload sent from the router
+    * @param {object} res - The response payload sent back from the controller
+    * @returns {object} - unique id
+    */
+  static async findById(req, res) {
+    const token = req.params.id;
+    try {
+      const cart = await Cart.find({ token }).populate('product');
       return res.status(200).json(cart);
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
