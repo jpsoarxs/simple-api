@@ -70,7 +70,7 @@ class CartController {
         cart = await Cart.findById(cart._id).populate('product');
       }
 
-      return res.status(200).json({ cart });
+      return res.status(200).json(cart);
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
     }
