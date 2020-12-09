@@ -53,23 +53,20 @@ class CartController {
 
       const CartExist = await Cart.find({ token, product });
 
-      let cart = [];
       if (CartExist.length > 0) {
         const filter = CartExist.filter(e => e.color.name === color.name && e.size === size);
         if (filter.length > 0) {
           await Cart.updateOne(
             { _id: filter[0]._id.toString() }, { quantity: filter[0].quantity + quantity }
           );
-          cart = await Cart.findById(filter[0]._id).populate('product');
         } else {
-          cart = await Cart.create(req.body);
-          cart = await Cart.findById(cart._id).populate('product');
+          await Cart.create(req.body);
         }
       } else {
-        cart = await Cart.create(req.body);
-        cart = await Cart.findById(cart._id).populate('product');
+        await Cart.create(req.body);
       }
 
+      const cart = await Cart.find({ token }).populate('product');
       return res.status(200).json(cart);
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
