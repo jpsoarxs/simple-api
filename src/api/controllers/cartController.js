@@ -60,14 +60,14 @@ class CartController {
           await Cart.updateOne(
             { _id: filter[0]._id.toString() }, { quantity: filter[0].quantity + quantity }
           );
-          cart = await Cart.findById(filter[0]._id).populate(['product', 'customer']);
+          cart = await Cart.findById(filter[0]._id).populate('product');
         } else {
           cart = await Cart.create(req.body);
-          cart = await Cart.findById(cart._id).populate(['product', 'customer']);
+          cart = await Cart.findById(cart._id).populate('product');
         }
       } else {
         cart = await Cart.create(req.body);
-        cart = await Cart.findById(cart._id).populate(['product', 'customer']);
+        cart = await Cart.findById(cart._id).populate('product');
       }
 
       return res.status(200).json({ cart });

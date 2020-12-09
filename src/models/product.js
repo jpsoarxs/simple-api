@@ -13,7 +13,7 @@ const ProductSchema = new mongoose.Schema({
     type: Number,
     require: true
   },
-  desconted_price: {
+  discounted_price: {
     type: Number,
     default: 0,
     required: false

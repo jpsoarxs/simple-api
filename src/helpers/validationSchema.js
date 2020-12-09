@@ -34,7 +34,6 @@ const addressSchema = {
 const shoppingCartSchema = {
   token: Joi.string().required(),
   product: Joi.string().required(),
-  customer: Joi.string().required(),
   quantity: Joi.number().required(),
   color: Joi.object().keys({
     name: Joi.string().required(),
