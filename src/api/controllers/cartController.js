@@ -105,6 +105,23 @@ class CartController {
       res.status(500).json({ error: 'Internal server error' });
     }
   }
+
+
+  /**
+    * @description -This method generates a unique id
+    * @param {object} req - The request payload sent from the router
+    * @param {object} res - The response payload sent back from the controller
+    * @returns {object} - unique id
+    */
+  static async remove(req, res) {
+    const { id } = req.params;
+    try {
+      await Cart.findByIdAndRemove({ _id: id }).populate('product');
+      return res.status(200).json({ _id: id, message: 'Produto removido com sucesso' });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
 }
 
 export default CartController;

@@ -11,5 +11,6 @@ cartRouter.get('/token', cartController.generateUniqueId);
 cartRouter.post('/add', cartController.add);
 cartRouter.get('/', auth, permission.permit('admin'), cartController.list);
 cartRouter.get('/:id', cartController.findById);
+cartRouter.delete('/:id', cartController.remove);
 
 export default cartRouter;
