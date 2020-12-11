@@ -9,6 +9,6 @@ const cupomRouter = Router();
 
 cupomRouter.post('/', auth, permission.permit('admin'), cupomController.create);
 cupomRouter.get('/', auth, permission.permit('admin'), cupomController.list);
-cupomRouter.get('/:id', cupomController.findByID);
+cupomRouter.post('/find', cupomController.findByID);
 
 export default cupomRouter;

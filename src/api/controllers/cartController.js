@@ -116,8 +116,13 @@ class CartController {
   static async remove(req, res) {
     const { id } = req.params;
     try {
-      await Cart.findByIdAndRemove({ _id: id }).populate('product');
-      return res.status(200).json({ _id: id, message: 'Produto removido com sucesso' });
+      const exist = await Cart.findOne({ _id: id });
+
+      if (exist) {
+        await Cart.findByIdAndRemove({ _id: id });
+        return res.status(200).json({ _id: id, message: 'Produto removido com sucesso' });
+      }
+      return errorResponse(res, 400, 'CAR_01', 'Produto não foi encontrado');
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
     }

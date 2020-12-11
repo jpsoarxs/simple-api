@@ -1,5 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 import Cupom from '../../models/cupom';
+import helpers from '../../helpers/utils';
+
+const {
+  errorResponse,
+} = helpers;
 
 /**
    * @export
@@ -34,7 +39,7 @@ class CupomController {
         code: randomCode, type, value, count, expiredAt
       });
 
-      return res.status(200).json({ cupom });
+      return res.status(200).json(cupom);
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
     }
@@ -64,10 +69,21 @@ class CupomController {
     * @returns {object} - unique id
     */
   static async findByID(req, res) {
-    const { id } = req.params;
+    const { cupom } = req.body;
     try {
-      const cupom = await Cupom.findById(id);
-      return res.status(200).json(cupom);
+      const exist = await Cupom.findOne({ code: cupom });
+
+      if (exist) {
+        const formated = {
+          _id: exist._id,
+          cupom: exist.code,
+          type: exist.type,
+          value: exist.value
+        };
+
+        return res.status(200).json(formated);
+      }
+      return errorResponse(res, 400, 'CUP_01', 'O cupom informado não existe');
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
     }
