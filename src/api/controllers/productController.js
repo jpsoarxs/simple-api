@@ -48,10 +48,10 @@ class ProductController {
         title, description, price, thumbnail, category, attributes: ids
       });
 
-      product = await Product.findById(product._id.toString()).populate(['category', 'attributes']);
+      product = await Product.findById(product._id.toString()).populate(['category', 'attributes', 'collection']);
 
       //   const product = await Product.create(req.body);
-      return res.status(201).json({ product });
+      return res.status(201).json(product);
     } catch (error) {
       res.status(500).json({ error: 'Internal Server Error' });
     }
@@ -66,7 +66,7 @@ class ProductController {
     */
   static async list(req, res) {
     try {
-      const product = await Product.find().populate(['category', 'attributes']);
+      const product = await Product.find().populate(['category', 'attributes', 'collection']);
       return res.status(200).json(product);
     } catch (error) {
       res.status(500).json({ error: 'Internal Server Error' });
@@ -83,7 +83,7 @@ class ProductController {
   static async findByID(req, res) {
     const { id } = req.params;
     try {
-      const product = await Product.findById(id).populate(['category', 'attributes']);
+      const product = await Product.findById(id).populate(['category', 'attributes', 'collection']);
 
       if (!product) {
         return errorResponse(res, 400, 'PRO_01', 'Nenhum produto encontrado com esse ID');

@@ -19,7 +19,12 @@ const CustomerSchema = new mongoose.Schema({
     required: true,
     select: false
   },
-  address: {
+  address: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Address',
+    default: []
+  }],
+  phone: {
     type: String,
     required: false
   },

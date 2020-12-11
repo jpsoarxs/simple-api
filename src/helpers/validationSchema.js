@@ -21,16 +21,6 @@ const registerSchema = {
   password: Joi.string().min(5).max(50).required(),
 };
 
-const addressSchema = {
-  address_1: Joi.string().required(),
-  address_2: Joi.string(),
-  city: Joi.string().required(),
-  region: Joi.string().required(),
-  postal_code: Joi.string().required(),
-  country: Joi.string().required(),
-  shipping_region_id: Joi.number().required(),
-};
-
 const shoppingCartSchema = {
   token: Joi.string().required(),
   product: Joi.string().required(),
@@ -40,6 +30,15 @@ const shoppingCartSchema = {
     hex: Joi.string().required()
   }).required(),
   size: Joi.string().required()
+};
+
+const addressSchema = {
+  title: Joi.string().required(),
+  address: Joi.string().required(),
+  complement: Joi.string(),
+  uf: Joi.string().required(),
+  city: Joi.string().required(),
+  cep: Joi.string().required()
 };
 
 const orderSchema = {
@@ -75,5 +74,5 @@ export default {
   addressSchema,
   registerSchema,
   customerSchema,
-  productSchema
+  productSchema,
 };
