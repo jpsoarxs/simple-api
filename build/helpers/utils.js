@@ -18,16 +18,26 @@ var _joi2 = _interopRequireDefault(_joi);
 
 require('dotenv/config');
 
+var _xml2js = require('xml2js');
+
+var _xml2js2 = _interopRequireDefault(_xml2js);
+
+var _http = require('http');
+
+var _http2 = _interopRequireDefault(_http);
+
 var _validationSchema = require('./validationSchema');
 
 var _validationSchema2 = _interopRequireDefault(_validationSchema);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /* eslint-disable no-unused-vars */
+
 
 var options = { language: { key: '{{key}} ' } };
 
+var parseString = _xml2js2.default.parseString;
 exports.default = {
   hashPassword: function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(password) {
@@ -97,6 +107,30 @@ exports.default = {
       email: email,
       role: role
     }, process.env.SECRET, { expiresIn: 86400 });
+  },
+  xmlToJson: function xmlToJson(url, callback) {
+    // eslint-disable-next-line no-var
+    var req = _http2.default.get(url, function (res) {
+      var xml = '';
+
+      res.on('data', function (chunk) {
+        xml += chunk;
+      });
+
+      res.on('error', function (e) {
+        callback(e, null);
+      });
+
+      res.on('timeout', function (e) {
+        callback(e, null);
+      });
+
+      res.on('end', function () {
+        parseString(xml, function (_err, result) {
+          callback(null, result);
+        });
+      });
+    });
   },
   validateRegisterDetails: function validateRegisterDetails(user) {
     return _joi2.default.validate(user, _validationSchema2.default.registerSchema, options);

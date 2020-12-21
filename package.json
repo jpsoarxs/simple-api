@@ -36,7 +36,9 @@
     "lodash": "^4.17.11",
     "mongoose": "^5.11.4",
     "passport-facebook": "^3.0.0",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "stripe": "^8.129.0",
+    "xml2js": "^0.4.23"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

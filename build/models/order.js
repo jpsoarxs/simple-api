@@ -10,24 +10,33 @@ var _connection2 = _interopRequireDefault(_connection);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var CartSchema = new _connection2.default.Schema({
-  token: {
+var OrderSchema = new _connection2.default.Schema({
+  cart: {
     type: String,
     required: true
   },
-  product: {
-    type: _connection2.default.Schema.Types.ObjectId,
-    ref: 'Product',
+  transaction: {
+    type: String,
     required: true
   },
-  attribute: {
+  payment: {
+    status: { type: String, default: 'pending' },
+    dispatch: { type: Number, default: 0.00 },
+    price: { type: Number, required: true }
+  },
+  customer: {
     type: _connection2.default.Schema.Types.ObjectId,
-    ref: 'Attribute',
+    ref: 'Customer',
     required: true
   },
-  quantity: {
-    type: Number,
-    default: 1
+  address: {
+    type: _connection2.default.Schema.Types.ObjectId,
+    ref: 'Address',
+    required: true
+  },
+  updatedAt: {
+    type: Date,
+    required: true
   },
   createdAt: {
     type: Date,
@@ -35,6 +44,6 @@ var CartSchema = new _connection2.default.Schema({
   }
 });
 
-var Cart = _connection2.default.model('Cart', CartSchema);
+var Order = _connection2.default.model('Order', OrderSchema);
 
-exports.default = Cart;
+exports.default = Order;

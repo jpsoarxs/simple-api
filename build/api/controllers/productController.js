@@ -90,11 +90,11 @@ var ProductController = function () {
               case 13:
                 product = _context.sent;
                 _context.next = 16;
-                return _product2.default.findById(product._id.toString()).populate(['category', 'attributes']);
+                return _product2.default.findById(product._id.toString()).populate(['category', 'attributes', 'collection']);
 
               case 16:
                 product = _context.sent;
-                return _context.abrupt('return', res.status(201).json({ product: product }));
+                return _context.abrupt('return', res.status(201).json(product));
 
               case 20:
                 _context.prev = 20;
@@ -135,7 +135,7 @@ var ProductController = function () {
               case 0:
                 _context2.prev = 0;
                 _context2.next = 3;
-                return _product2.default.find().populate(['category', 'attributes']);
+                return _product2.default.find().populate(['category', 'attributes', 'collection']);
 
               case 3:
                 product = _context2.sent;
@@ -181,7 +181,7 @@ var ProductController = function () {
                 id = req.params.id;
                 _context3.prev = 1;
                 _context3.next = 4;
-                return _product2.default.findById(id).populate('category');
+                return _product2.default.findById(id).populate(['category', 'attributes', 'collection']);
 
               case 4:
                 product = _context3.sent;

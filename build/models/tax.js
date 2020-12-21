@@ -10,24 +10,14 @@ var _connection2 = _interopRequireDefault(_connection);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var CartSchema = new _connection2.default.Schema({
-  token: {
+var OrderSchema = new _connection2.default.Schema({
+  title: {
     type: String,
     required: true
   },
-  product: {
-    type: _connection2.default.Schema.Types.ObjectId,
-    ref: 'Product',
+  delivery: {
+    type: String,
     required: true
-  },
-  attribute: {
-    type: _connection2.default.Schema.Types.ObjectId,
-    ref: 'Attribute',
-    required: true
-  },
-  quantity: {
-    type: Number,
-    default: 1
   },
   createdAt: {
     type: Date,
@@ -35,6 +25,6 @@ var CartSchema = new _connection2.default.Schema({
   }
 });
 
-var Cart = _connection2.default.model('Cart', CartSchema);
+var Order = _connection2.default.model('Tax', OrderSchema);
 
-exports.default = Cart;
+exports.default = Order;

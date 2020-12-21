@@ -4,7 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* eslint-disable no-underscore-dangle */
+
 
 var _utils = require('../../helpers/utils');
 
@@ -14,7 +15,13 @@ var _customer = require('../../models/customer');
 
 var _customer2 = _interopRequireDefault(_customer);
 
+var _address2 = require('../../models/address');
+
+var _address3 = _interopRequireDefault(_address2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
@@ -22,6 +29,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var validateRegisterDetails = _utils2.default.validateRegisterDetails,
     validateLoginDetails = _utils2.default.validateLoginDetails,
+    validateAddressDetails = _utils2.default.validateAddressDetails,
     comparePasswords = _utils2.default.comparePasswords,
     createToken = _utils2.default.createToken,
     hashPassword = _utils2.default.hashPassword,
@@ -100,6 +108,7 @@ var CustomerController = function () {
                   name: customer.name,
                   lastname: customer.lastname,
                   email: customer.email,
+                  address: customer.address,
                   createdAt: customer.createdAt
                 };
                 return _context.abrupt('return', res.status(200).json({
@@ -159,7 +168,7 @@ var CustomerController = function () {
 
               case 7:
                 _context2.next = 9;
-                return _customer2.default.findOne({ email: email }).select('+password');
+                return _customer2.default.findOne({ email: email }).select('+password').populate(['address']);
 
               case 9:
                 existingCustomer = _context2.sent;
@@ -195,6 +204,7 @@ var CustomerController = function () {
                   name: customer.name,
                   lastname: customer.lastname,
                   email: customer.email,
+                  address: customer.address,
                   createdAt: customer.createdAt
                 };
                 return _context2.abrupt('return', res.status(200).json({
@@ -225,6 +235,139 @@ var CustomerController = function () {
       }
 
       return login;
+    }()
+
+    /**
+      * @description -This method autenticate a customer
+      * @param {object} req - The request payload
+      * @param {object} res - The response payload sent back from the method
+      * @returns {object} - customer and accessToken
+      */
+
+  }, {
+    key: 'update',
+    value: function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(req, res) {
+        var _id, customer;
+
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _id = req.user._id;
+                _context3.prev = 1;
+
+                if (!req.body.address) {
+                  _context3.next = 4;
+                  break;
+                }
+
+                return _context3.abrupt('return', errorResponse(res, 400, 'USR_01', 'Você não pode modificar o endereço', 'address'));
+
+              case 4:
+                _context3.next = 6;
+                return _customer2.default.updateOne({ _id: _id }, req.body);
+
+              case 6:
+                _context3.next = 8;
+                return _customer2.default.findOne({ _id: _id }).select('-address');
+
+              case 8:
+                customer = _context3.sent;
+                return _context3.abrupt('return', res.status(200).json(customer));
+
+              case 12:
+                _context3.prev = 12;
+                _context3.t0 = _context3['catch'](1);
+
+                res.status(500).json({ error: 'Internal Server Error' });
+
+              case 15:
+              case 'end':
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this, [[1, 12]]);
+      }));
+
+      function update(_x5, _x6) {
+        return _ref3.apply(this, arguments);
+      }
+
+      return update;
+    }()
+
+    /**
+      * @description -This method autenticate a customer
+      * @param {object} req - The request payload
+      * @param {object} res - The response payload sent back from the method
+      * @returns {object} - customer and accessToken
+      */
+
+  }, {
+    key: 'address',
+    value: function () {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(req, res) {
+        var _id, _validateAddressDetai, error, errorField, errorMessage, find, _address, updated;
+
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _id = req.user._id;
+                _context4.prev = 1;
+                _validateAddressDetai = validateAddressDetails(req.body), error = _validateAddressDetai.error;
+
+                if (!error) {
+                  _context4.next = 7;
+                  break;
+                }
+
+                errorField = error.details[0].context.key;
+                errorMessage = error.details[0].message;
+                return _context4.abrupt('return', errorResponse(res, 400, 'USR_01', errorMessage, errorField));
+
+              case 7:
+                _context4.next = 9;
+                return _customer2.default.findOne({ _id: _id });
+
+              case 9:
+                find = _context4.sent;
+                _context4.next = 12;
+                return _address3.default.create(req.body);
+
+              case 12:
+                _address = _context4.sent;
+                _context4.next = 15;
+                return _customer2.default.updateOne({ _id: _id }, { address: [].concat(_toConsumableArray(find.address), [_address._id]) });
+
+              case 15:
+                _context4.next = 17;
+                return _customer2.default.findOne({ _id: _id }).populate(['address']);
+
+              case 17:
+                updated = _context4.sent;
+                return _context4.abrupt('return', res.status(200).json(updated));
+
+              case 21:
+                _context4.prev = 21;
+                _context4.t0 = _context4['catch'](1);
+
+                res.status(500).json({ error: 'Internal Server Error' });
+
+              case 24:
+              case 'end':
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this, [[1, 21]]);
+      }));
+
+      function address(_x7, _x8) {
+        return _ref4.apply(this, arguments);
+      }
+
+      return address;
     }()
   }]);
 

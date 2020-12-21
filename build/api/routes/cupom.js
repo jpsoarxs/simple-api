@@ -24,6 +24,6 @@ var cupomRouter = (0, _express.Router)();
 
 cupomRouter.post('/', _authenticate2.default, _authorization2.default.permit('admin'), _cupomController2.default.create);
 cupomRouter.get('/', _authenticate2.default, _authorization2.default.permit('admin'), _cupomController2.default.list);
-cupomRouter.get('/:id', _cupomController2.default.findByID);
+cupomRouter.post('/find', _cupomController2.default.findByID);
 
 exports.default = cupomRouter;

@@ -29,7 +29,12 @@ var CustomerSchema = new _connection2.default.Schema({
     required: true,
     select: false
   },
-  address: {
+  address: [{
+    type: _connection2.default.Schema.Types.ObjectId,
+    ref: 'Address',
+    default: []
+  }],
+  phone: {
     type: String,
     required: false
   },

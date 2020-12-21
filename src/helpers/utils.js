@@ -1,10 +1,15 @@
+/* eslint-disable no-unused-vars */
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Joi from '@hapi/joi';
 import 'dotenv/config';
+import xml2js from 'xml2js';
+import http from 'http';
 import schema from './validationSchema';
 
 const options = { language: { key: '{{key}} ' } };
+
+const { parseString } = xml2js;
 
 export default {
   async hashPassword(password) {
@@ -27,6 +32,31 @@ export default {
       role,
     },
     process.env.SECRET, { expiresIn: 86400 });
+  },
+
+  xmlToJson(url, callback) {
+    // eslint-disable-next-line no-var
+    var req = http.get(url, (res) => {
+      let xml = '';
+
+      res.on('data', (chunk) => {
+        xml += chunk;
+      });
+
+      res.on('error', (e) => {
+        callback(e, null);
+      });
+
+      res.on('timeout', (e) => {
+        callback(e, null);
+      });
+
+      res.on('end', () => {
+        parseString(xml, (_err, result) => {
+          callback(null, result);
+        });
+      });
+    });
   },
 
   validateRegisterDetails(user) {

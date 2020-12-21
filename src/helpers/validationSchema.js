@@ -25,11 +25,7 @@ const shoppingCartSchema = {
   token: Joi.string().required(),
   product: Joi.string().required(),
   quantity: Joi.number().required(),
-  color: Joi.object().keys({
-    name: Joi.string().required(),
-    hex: Joi.string().required()
-  }).required(),
-  size: Joi.string().required()
+  attribute: Joi.string().required(),
 };
 
 const addressSchema = {
@@ -42,15 +38,11 @@ const addressSchema = {
 };
 
 const orderSchema = {
-  cart_id: Joi.required(),
-  shipping_id: Joi.number().required(),
-  tax_id: Joi.number().required(),
-  status: Joi.number(),
-  reference: Joi.string(),
-  auth_code: Joi.string(),
-  comments: Joi.string(),
-  shipped_on: Joi.date()
-
+  cart: Joi.string().required(),
+  transaction: Joi.string().required(),
+  cupom: Joi.string(),
+  customer: Joi.string().required(),
+  address: Joi.string().required(),
 };
 
 const productSchema = {

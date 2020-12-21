@@ -19,6 +19,12 @@ var AttributeSchema = new _connection2.default.Schema({
     type: Object,
     required: true
   },
+  dimension: {
+    height: { type: Number, required: true },
+    width: { type: Number, required: true },
+    lenght: { type: Number, required: true },
+    weight: { type: Number, required: true }
+  },
   size: {
     type: String,
     required: true

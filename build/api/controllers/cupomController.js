@@ -11,17 +11,24 @@ var _cupom = require('../../models/cupom');
 
 var _cupom2 = _interopRequireDefault(_cupom);
 
+var _utils = require('../../helpers/utils');
+
+var _utils2 = _interopRequireDefault(_utils);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var errorResponse = _utils2.default.errorResponse;
+
 /**
    * @export
    * @class CupomController
    * @description Performs operations on the Cupom
    */
+
 var CupomController = function () {
   function CupomController() {
     _classCallCheck(this, CupomController);
@@ -67,7 +74,7 @@ var CupomController = function () {
 
               case 6:
                 cupom = _context.sent;
-                return _context.abrupt('return', res.status(200).json({ cupom: cupom }));
+                return _context.abrupt('return', res.status(200).json(cupom));
 
               case 10:
                 _context.prev = 10;
@@ -146,32 +153,47 @@ var CupomController = function () {
     key: 'findByID',
     value: function () {
       var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(req, res) {
-        var id, cupom;
+        var cupom, exist, formated;
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                id = req.params.id;
+                cupom = req.body.cupom;
                 _context3.prev = 1;
                 _context3.next = 4;
-                return _cupom2.default.findById(id);
+                return _cupom2.default.findOne({ code: cupom });
 
               case 4:
-                cupom = _context3.sent;
-                return _context3.abrupt('return', res.status(200).json(cupom));
+                exist = _context3.sent;
+
+                if (!exist) {
+                  _context3.next = 8;
+                  break;
+                }
+
+                formated = {
+                  _id: exist._id,
+                  cupom: exist.code,
+                  type: exist.type,
+                  value: exist.value
+                };
+                return _context3.abrupt('return', res.status(200).json(formated));
 
               case 8:
-                _context3.prev = 8;
+                return _context3.abrupt('return', errorResponse(res, 400, 'CUP_01', 'O cupom informado não existe'));
+
+              case 11:
+                _context3.prev = 11;
                 _context3.t0 = _context3['catch'](1);
 
                 res.status(500).json({ error: 'Internal server error' });
 
-              case 11:
+              case 14:
               case 'end':
                 return _context3.stop();
             }
           }
-        }, _callee3, this, [[1, 8]]);
+        }, _callee3, this, [[1, 11]]);
       }));
 
       function findByID(_x5, _x6) {

@@ -23,7 +23,7 @@ var ProductSchema = new _connection2.default.Schema({
     type: Number,
     require: true
   },
-  desconted_price: {
+  discounted_price: {
     type: Number,
     default: 0,
     required: false

@@ -105,13 +105,13 @@ var CartController = function () {
     key: 'add',
     value: function () {
       var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(req, res) {
-        var _req$body, token, color, size, product, quantity, _validateCartDetails, error, errorField, errorMessage, CartExist, cart, filter;
+        var _req$body, token, attribute, product, quantity, _validateCartDetails, error, errorField, errorMessage, CartExist, filter, cart;
 
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _req$body = req.body, token = _req$body.token, color = _req$body.color, size = _req$body.size, product = _req$body.product, quantity = _req$body.quantity;
+                _req$body = req.body, token = _req$body.token, attribute = _req$body.attribute, product = _req$body.product, quantity = _req$body.quantity;
                 _context2.prev = 1;
                 _validateCartDetails = validateCartDetails(req.body), error = _validateCartDetails.error;
 
@@ -130,32 +130,34 @@ var CartController = function () {
 
               case 9:
                 CartExist = _context2.sent;
-                cart = [];
 
                 if (!(CartExist.length > 0)) {
-                  _context2.next = 29;
-                  break;
-                }
-
-                filter = CartExist.filter(function (e) {
-                  return e.color.name === color.name && e.size === size;
-                });
-
-                if (!(filter.length > 0)) {
                   _context2.next = 21;
                   break;
                 }
 
-                _context2.next = 16;
+                filter = CartExist.filter(function (e) {
+                  return e.attribute.toString() === attribute;
+                });
+
+                if (!(filter.length > 0)) {
+                  _context2.next = 17;
+                  break;
+                }
+
+                _context2.next = 15;
                 return _cart2.default.updateOne({ _id: filter[0]._id.toString() }, { quantity: filter[0].quantity + quantity });
 
-              case 16:
-                _context2.next = 18;
-                return _cart2.default.findById(filter[0]._id).populate(['product', 'customer']);
+              case 15:
+                _context2.next = 19;
+                break;
 
-              case 18:
-                cart = _context2.sent;
-                _context2.next = 27;
+              case 17:
+                _context2.next = 19;
+                return _cart2.default.create(req.body);
+
+              case 19:
+                _context2.next = 23;
                 break;
 
               case 21:
@@ -163,44 +165,25 @@ var CartController = function () {
                 return _cart2.default.create(req.body);
 
               case 23:
-                cart = _context2.sent;
-                _context2.next = 26;
-                return _cart2.default.findById(cart._id).populate(['product', 'customer']);
+                _context2.next = 25;
+                return _cart2.default.find({ token: token }).populate(['product', 'attribute']);
 
-              case 26:
+              case 25:
                 cart = _context2.sent;
-
-              case 27:
-                _context2.next = 35;
-                break;
+                return _context2.abrupt('return', res.status(200).json(cart));
 
               case 29:
-                _context2.next = 31;
-                return _cart2.default.create(req.body);
-
-              case 31:
-                cart = _context2.sent;
-                _context2.next = 34;
-                return _cart2.default.findById(cart._id).populate(['product', 'customer']);
-
-              case 34:
-                cart = _context2.sent;
-
-              case 35:
-                return _context2.abrupt('return', res.status(200).json({ cart: cart }));
-
-              case 38:
-                _context2.prev = 38;
+                _context2.prev = 29;
                 _context2.t0 = _context2['catch'](1);
 
                 res.status(500).json({ error: 'Internal server error' });
 
-              case 41:
+              case 32:
               case 'end':
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[1, 38]]);
+        }, _callee2, this, [[1, 29]]);
       }));
 
       function add(_x3, _x4) {
@@ -228,7 +211,7 @@ var CartController = function () {
               case 0:
                 _context3.prev = 0;
                 _context3.next = 3;
-                return _cart2.default.find().populate(['customer', 'product']);
+                return _cart2.default.find().populate('product');
 
               case 3:
                 cart = _context3.sent;
@@ -253,6 +236,111 @@ var CartController = function () {
       }
 
       return list;
+    }()
+
+    /**
+      * @description -This method generates a unique id
+      * @param {object} req - The request payload sent from the router
+      * @param {object} res - The response payload sent back from the controller
+      * @returns {object} - unique id
+      */
+
+  }, {
+    key: 'findById',
+    value: function () {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(req, res) {
+        var token, cart;
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                token = req.params.id;
+                _context4.prev = 1;
+                _context4.next = 4;
+                return _cart2.default.find({ token: token }).populate('product');
+
+              case 4:
+                cart = _context4.sent;
+                return _context4.abrupt('return', res.status(200).json(cart));
+
+              case 8:
+                _context4.prev = 8;
+                _context4.t0 = _context4['catch'](1);
+
+                res.status(500).json({ error: 'Internal server error' });
+
+              case 11:
+              case 'end':
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this, [[1, 8]]);
+      }));
+
+      function findById(_x7, _x8) {
+        return _ref4.apply(this, arguments);
+      }
+
+      return findById;
+    }()
+
+    /**
+      * @description -This method generates a unique id
+      * @param {object} req - The request payload sent from the router
+      * @param {object} res - The response payload sent back from the controller
+      * @returns {object} - unique id
+      */
+
+  }, {
+    key: 'remove',
+    value: function () {
+      var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(req, res) {
+        var id, exist;
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                id = req.params.id;
+                _context5.prev = 1;
+                _context5.next = 4;
+                return _cart2.default.findOne({ _id: id });
+
+              case 4:
+                exist = _context5.sent;
+
+                if (!exist) {
+                  _context5.next = 9;
+                  break;
+                }
+
+                _context5.next = 8;
+                return _cart2.default.findByIdAndRemove({ _id: id });
+
+              case 8:
+                return _context5.abrupt('return', res.status(200).json({ _id: id, message: 'Produto removido com sucesso' }));
+
+              case 9:
+                return _context5.abrupt('return', errorResponse(res, 400, 'CAR_01', 'Produto não foi encontrado'));
+
+              case 12:
+                _context5.prev = 12;
+                _context5.t0 = _context5['catch'](1);
+
+                res.status(500).json({ error: 'Internal server error' });
+
+              case 15:
+              case 'end':
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this, [[1, 12]]);
+      }));
+
+      function remove(_x9, _x10) {
+        return _ref5.apply(this, arguments);
+      }
+
+      return remove;
     }()
   }]);
 

@@ -40,7 +40,7 @@ class CartController {
     */
   static async add(req, res) {
     const {
-      token, color, size, product, quantity
+      token, attribute, product, quantity
     } = req.body;
     try {
       const { error } = validateCartDetails(req.body);
@@ -52,9 +52,8 @@ class CartController {
       }
 
       const CartExist = await Cart.find({ token, product });
-
       if (CartExist.length > 0) {
-        const filter = CartExist.filter(e => e.color.name === color.name && e.size === size);
+        const filter = CartExist.filter(e => e.attribute.toString() === attribute);
         if (filter.length > 0) {
           await Cart.updateOne(
             { _id: filter[0]._id.toString() }, { quantity: filter[0].quantity + quantity }
@@ -66,7 +65,7 @@ class CartController {
         await Cart.create(req.body);
       }
 
-      const cart = await Cart.find({ token }).populate('product');
+      const cart = await Cart.find({ token }).populate(['product', 'attribute']);
       return res.status(200).json(cart);
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
